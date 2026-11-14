@@ -1,20 +1,34 @@
 # Fluorescence Image Analysis
 
-荧光图像分析与自动排版：ImageJ/Fiji 定量 → Excel → GraphPad Prism → Merge、标尺与可编辑 PPT。
+荧光图像分析与自动排版：ImageJ/Fiji 定量 → Excel → GraphPad Prism → Merge、标尺与可编辑 PPT。支持 **Claude Code 和 Codex**。
 
 ![功能概览](workflow-overview.png)
 
-## 一条命令安装
+## 安装到 Claude Code 和 Codex
 
-在 **PowerShell** 中运行：
+已安装 Node.js 22.20+ 后，在终端运行以下一条命令，同时安装到两个客户端：
 
-```powershell
-irm https://raw.githubusercontent.com/BoBolol-CN/fluorescence-image-analysis/main/install.ps1 | iex
+```bash
+npx skills add https://raw.githubusercontent.com/BoBolol-CN/fluorescence-image-analysis/main/fluorescence-image-analysis.zip -g -a claude-code codex --copy
 ```
 
-安装器下载完整 skill、校验 SHA-256，并安装到 CODEX_HOME/skills；未设置 CODEX_HOME 时使用 ~/.codex/skills。已有同名目录时会停止，不覆盖你的本地版本。安装完成后打开新的 Codex 对话，使用 $fluorescence-image-analysis。
+只安装其中一个客户端时：
 
-也可下载 [完整安装包](fluorescence-image-analysis.zip) 手动安装。全部脚本、参考文档、模板和资源都在包内。
+```bash
+# Claude Code
+npx skills add https://raw.githubusercontent.com/BoBolol-CN/fluorescence-image-analysis/main/fluorescence-image-analysis.zip -g -a claude-code --copy
+
+# Codex
+npx skills add https://raw.githubusercontent.com/BoBolol-CN/fluorescence-image-analysis/main/fluorescence-image-analysis.zip -g -a codex --copy
+```
+
+命令可在 PowerShell、macOS 或 Linux 终端执行；PowerShell 只是终端，不是所需客户端。`-g` 表示全局安装，`--copy` 使用文件副本，避免 Windows 符号链接权限问题。安装采用 [Vercel Skills CLI](https://github.com/vercel-labs/skills)。
+
+安装后打开新会话：Claude Code 输入 `/fluorescence-image-analysis`，Codex 输入 `$fluorescence-image-analysis`，再附图片文件夹路径和需求。
+
+也可下载 [完整 skill ZIP](fluorescence-image-analysis.zip)，将其中的 `fluorescence-image-analysis` 文件夹放到 Claude Code 的 `~/.claude/skills/` 或 Codex 的 `$CODEX_HOME/skills/`（未设置时为 `~/.codex/skills/`）。Claude 网页版可通过自定义技能入口导入 ZIP，但网页环境不能因此直接操作你的本地 Fiji、Prism 或磁盘。
+
+全部源码、脚本和参考文档均包含在完整 skill ZIP 中。
 
 ## 三类定量
 
@@ -24,51 +38,40 @@ irm https://raw.githubusercontent.com/BoBolol-CN/fluorescence-image-analysis/mai
 | 无核染的单目标荧光 | 全视野MFI，按目的选择总荧光 |
 | 两个目标荧光通道 | 通道比值，或分别定量 |
 
-AI 先扫描，再建议实际指标；视野、孔和样本分层汇总，输出 Excel、Prism 工程及原生图。代表图可自动选图、拆分/合并通道、添加标尺并排版。需要裁剪时先展示完整图上的选框。PPT 的图片、组名和标签分别可编辑。
+AI 先扫描，再建议实际指标；按视野、孔和样本分层汇总，输出 Excel、Prism 工程及原生图。代表图可自动选图、拆分/合并通道、添加标尺并排版。需要裁剪时先展示完整图上的选框。PPT 的图片、组名和标签分别可编辑。
 
 ## 实际处理示例
 
-以下为作者提供并授权展示的实际实验结果预览，均叠加 BoBolol-CN | DEMO 水印。仅展示图像处理和排版能力，不据此解释生物学结论；未提供原始实验文件、可编辑工程或完整分辨率数据。顶部功能介绍图中的细胞和图表为生成示意。
+以下为实际结果的匿名演示副本，已删除实验分组信息并叠加 BoBolol-CN | DEMO 水印。功能介绍图中的细胞和图表为生成示意。
 
-### 示例一：C2C12 多实验整区排版
+### 示例一：多实验整区排版
 
-转染 8 组、JC-1 红绿双通道、DCFH-DA 与 DAF-FM 组合在同一版面，统计图置于相应模块右侧。下方采用“大 Merge＋两张小通道图”的紧凑组合，标尺为白色纯横线。
+多个实验模块组合在同一版面，统计图置于相应模块右侧。下方采用“大 Merge＋两张小通道图”的紧凑组合，标尺为白色纯横线。
 
-![C2C12 实际整区排版](example-c2c12.jpg)
+![匿名整区排版示例](example-c2c12.jpg)
 
-### 示例二：EC 多实验整区排版
+### 示例二：先确认选框，再裁剪
 
-展示统一列宽、组别标签、小通道标签和标尺位置的排版效果。
+左侧保留完整视野和 ROI 选框，右侧展示裁剪效果。同视野各通道与 Merge 使用相同 ROI，移动选框时保持裁剪尺寸。
 
-![EC 实际整区排版](example-ec.jpg)
-
-### 示例三：先确认选框，再裁剪
-
-完整视野保留在左侧，选框标出裁剪区域，右侧展示对应裁剪效果。同视野的各通道和 Merge 使用相同 ROI，调整位置时保持裁剪尺寸。
-
-![实际裁剪选框与效果](example-crop.jpg)
+![匿名裁剪选框与效果](example-crop.jpg)
 
 ## 使用示例
 
 ```text
-$fluorescence-image-analysis
 分析这个文件夹，先扫描并建议定量指标。
 ```
 
 ```text
-$fluorescence-image-analysis
 这些图已经完成 PS，照我提供的布局制作代表图，不裁剪。
 ```
 
 ```text
-$fluorescence-image-analysis
 制作代表图，需要裁剪。先给我看完整图上的选框，确认后生成可编辑 PPT。
 ```
 
-## 运行条件与边界
+## 运行条件
 
-需要本地 ImageJ/Fiji；Prism 原生出图需要已安装 GraphPad Prism。Excel/PPT 作者模块按当前 Codex 环境可用的相应技能与运行时执行。本仓库是 Codex skill，不是独立桌面软件。
+安装 skill 与安装实验软件是两件事。完整定量需要本地 ImageJ/Fiji；Prism 原生出图需要已安装 GraphPad Prism。Excel/PPT 可使用当前客户端作者工具，也可用 openpyxl、python-pptx。具体工具适配见 安装包中的 `references/cross-agent.md`。
 
-原始图像只读，PS/展示图不回流定量。核心支持 8/16-bit 二维图；新成像条件先做小批试算。实际指标未明确时集中询问；重复结构展示每孔 3 视野、每组 3 孔的可改示例，不能据此宣称生物学独立性。代表图仅补是否裁剪，裁剪时确认 ROI。物理标尺须有适用校准。
-
-包内机器路径已替换为占位符；历史脚本需适配当前环境。更多技术规则见安装包内 SKILL.md 与 references/。
+科学流程主要在 Windows 本地环境验证；Claude Code 可读取同一份规则与资源，但不表示所有客户端、操作系统和原生软件接口都已实测。原始图像只读，PS/展示图不回流定量；物理标尺须有适用校准。不同实验先试算，再按实际重复结构汇总。
